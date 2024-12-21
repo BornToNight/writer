@@ -1,6 +1,6 @@
 # Backend Application with Top Stack for Microservices Architecture  
 ## Microservice - Writer  
-[![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/BornToNight/writer/blob/writer/README.ru.md)
+[![ru](https://img.shields.io/badge/lang-ru-green.svg)](https://github.com/BornToNight/writer/blob/main/README.ru.md)
 
 The goal of this project is to practice with the most popular stack for Java/Kotlin developers (IMHO).
 

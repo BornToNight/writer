@@ -1,6 +1,6 @@
 # Backend Приложение с топ стэком для микросервесной архитектуры
 ## Микросервис - Writer
-[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/BornToNight/writer/blob/writer/README.md)
+[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/BornToNight/writer/blob/main/README.md)
 
 Цель проекта - потренироваться с самым популярным стэком для Java/Kotlin разработчика (ИМХО).
 
