@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="LOG_PATH" source="logging.path"/>
+    <springProperty scope="context" name="LOG_FILE" source="logging.file" defaultValue="log"/>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${LOGSTASH_HOST}:5000</destination>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <mdc />
+                <context />
+                <logLevel />
+                <loggerName />
+                <pattern>
+                    <pattern>
+                        {
+                        "app": "writer"
+                        }
+                    </pattern>
+                </pattern>
+                <threadName />
+                <message />
+                <logstashMarkers />
+                <stackTrace />
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOGSTASH"/>
+    </root>
+
+</configuration>
