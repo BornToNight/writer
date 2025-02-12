@@ -8,8 +8,9 @@ import ru.pachan.writer.dto.WriterDto;
 import ru.pachan.writer.model.Notification;
 import ru.pachan.writer.repository.NotificationRepository;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -23,23 +24,36 @@ public class WriterDtoConsumerImpl implements WriterDtoConsumer {
     @Override
     public void accept(List<WriterDto> writerDtoList) {
         log.info("start WriterDtoConsumerImpl.accept for {}", writerDtoList);
-        List<Notification> notificationList = writerDtoList.stream().collect(
-                Collectors.groupingBy(
-                        WriterDto::personId,
-                        Collectors.summingInt(WriterDto::count))
-        ).entrySet().stream().map(writerDtoEntry -> {
-                    Optional<Notification> notification = repository.findByPersonId(writerDtoEntry.getKey());
-                    if (notification.isPresent()) {
-                        notification.get().setCount(notification.get().getCount() + writerDtoEntry.getValue());
-                        return notification.get();
+
+        // Группируем данные по personId
+        Map<Long, Integer> groupedData = writerDtoList.stream()
+                .collect(Collectors.groupingBy(WriterDto::personId, Collectors.summingInt(WriterDto::count)));
+
+        // Получаем все существующие уведомления для personId из списка
+        List<Notification> existingNotifications = repository.findAll(new ArrayList<>(groupedData.keySet()));
+        Map<Long, Notification> notificationMap = existingNotifications.stream()
+                .collect(Collectors.toMap(Notification::getPersonId, notification -> notification));
+
+        // Создаем или обновляем уведомления
+        List<Notification> notificationList = groupedData.entrySet().stream()
+                .map(entry -> {
+                    Long personId = entry.getKey();
+                    int count = entry.getValue();
+
+                    Notification notification = notificationMap.get(personId);
+                    if (notification != null) {
+                        // Если уведомление существует, обновляем его
+                        notification.setCount(notification.getCount() + count);
                     } else {
-                        Notification newNotification = new Notification();
-                        newNotification.setPersonId(writerDtoEntry.getKey());
-                        newNotification.setCount(writerDtoEntry.getValue());
-                        return newNotification;
+                        // Если уведомления нет, создаем новое
+                        notification = new Notification();
+                        notification.setPersonId(personId);
+                        notification.setCount(count);
                     }
-                }
-        ).toList();
+                    return notification;
+                })
+                .collect(Collectors.toList());
+
         repository.saveAll(notificationList);
     }
 
