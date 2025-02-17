@@ -7,12 +7,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.pachan.writer.model.Notification;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-
-    Optional<Notification> findByPersonId(long personId);
 
     @Query(
             """
