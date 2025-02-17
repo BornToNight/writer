@@ -9,6 +9,7 @@ import ru.pachan.writer.model.Notification;
 import ru.pachan.writer.repository.NotificationRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class WriterDtoConsumerImpl implements WriterDtoConsumer {
                 .collect(Collectors.groupingBy(WriterDto::personId, Collectors.summingInt(WriterDto::count)));
 
         // Получаем все существующие уведомления для personId из списка
-        List<Notification> existingNotifications = repository.findAll(new ArrayList<>(groupedData.keySet()));
+        List<Notification> existingNotifications = repository.findAll(groupedData.keySet());
         Map<Long, Notification> notificationMap = existingNotifications.stream()
                 .collect(Collectors.toMap(Notification::getPersonId, notification -> notification));
 
