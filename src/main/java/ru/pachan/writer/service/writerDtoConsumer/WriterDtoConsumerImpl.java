@@ -8,15 +8,13 @@ import ru.pachan.writer.dto.WriterDto;
 import ru.pachan.writer.model.Notification;
 import ru.pachan.writer.repository.NotificationRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-@Service
 @Slf4j
+@Service
 public class WriterDtoConsumerImpl implements WriterDtoConsumer {
 
     private final NotificationRepository repository;
