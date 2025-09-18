@@ -18,7 +18,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import ru.pachan.writer.dto.WriterDto;
-import ru.pachan.writer.service.writerDtoConsumer.WriterDtoConsumer;
+import ru.pachan.writer.service.WriterDtoConsumer;
 
 import java.util.List;
 import java.util.Map;
@@ -68,7 +68,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaClient writerDtoConsumer(WriterDtoConsumer writerDtoConsumer) {
+    public KafkaClient kafkaClient(WriterDtoConsumer writerDtoConsumer) {
         return new KafkaClient(writerDtoConsumer);
     }
 

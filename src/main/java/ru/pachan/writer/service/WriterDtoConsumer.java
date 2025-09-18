@@ -1,4 +1,4 @@
-package ru.pachan.writer.service.writerDtoConsumer;
+package ru.pachan.writer.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +15,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class WriterDtoConsumerImpl implements WriterDtoConsumer {
+public class WriterDtoConsumer {
 
     private final NotificationRepository repository;
 
     @Transactional
-    @Override
     public void accept(List<WriterDto> writerDtoList) {
         log.info("start WriterDtoConsumerImpl.accept for {}", writerDtoList);
 
