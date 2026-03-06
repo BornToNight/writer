@@ -7,10 +7,6 @@ spring:
     name: writer
   config:
     import: optional:file:.env[.properties]
-  security:
-    user:
-      name: ${SPRING_USER}
-      password: ${SPRING_PASSWORD}
   boot:
     admin:
       client:
@@ -20,11 +16,7 @@ spring:
         password: ${SPRING_ADMIN_PASSWORD}
         instance:
           prefer-ip: true
-          metadata:
-            # от server
-            user:
-              name: ${SPRING_ADMIN_USER}
-              password: ${SPRING_ADMIN_PASSWORD}
+          management-base-url: http://${SERVICE_HOST}:${management.server.port}
   kafka:
     consumer:
       group-id: ${KAFKA_GROUP_ID}
@@ -78,6 +70,21 @@ server:
 
 # Настройка Actuator
 management:
+  server:
+    port: 5103
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: "livenessState,ping"
+          show-components: always
+          show-details: always
+        readiness:
+          include: "readinessState,ping,db"
+          show-components: always
+          show-details: always
   info:
     env:
       enabled: true
@@ -116,6 +123,18 @@ spring:
     properties:
       hibernate:
         generate_statistics: false
+
+# EXPLAIN_V Без Spring Admin достаточно было бы 2 ЭП этих
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: prometheus,health
+#  endpoint:
+#    prometheus:
+#      enabled: true
+#    health:
+#      enabled: true
 
 logging:
   level:
